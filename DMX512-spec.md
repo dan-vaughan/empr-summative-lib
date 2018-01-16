@@ -19,6 +19,7 @@ The data transmission format for a slot is as follows:
 Both the start code and the slots are framed as follows:
 
 Bit 1 2 3 4 5 6 7 8 9 10 11
+
     L X X X X X X X X H  H
 
 
