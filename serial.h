@@ -7,8 +7,8 @@ class Serial
 		int module;
 	public:
 		Serial(int mod);
-		int write(char * buf);
-		int read(char * buf);
+		int write(char * buf, int length);
 		void printf(char * buf, ...);
+		void sendbreak();
 };
 

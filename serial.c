@@ -3,6 +3,7 @@
 #include <stdarg.h>
 #include <string.h>
 #include <stdio.h>
+#include "lpc17xx_gpio.h"
 
 #include "serial.h"	
 #include "pindef.h"
@@ -31,14 +32,17 @@ void Serial::init()
 	UART_FIFO_CFG_Type UARTFIFOConfigStruct;
 	
 	UART_ConfigStructInit(&UARTConfigStruct);
-	UART_FIFOConfigStructInit(&UARTFIFOConfigStruct);
+	UART_FIFOConfigStructInit(&UARTFIFOConfigStruct);	
 
 	if (module == 1) {
+		
 		UART_Init((LPC_UART_TypeDef *)LPC_UART0, &UARTConfigStruct);		 
 		UART_FIFOConfig((LPC_UART_TypeDef *)LPC_UART0, &UARTFIFOConfigStruct);	
 		UART_TxCmd((LPC_UART_TypeDef *)LPC_UART0, ENABLE);		
 	}
 	else if (module == 2) {
+		UARTConfigStruct.Stopbits = UART_STOPBIT_2;
+		UARTConfigStruct.Baud_rate = 250000;
 		UART_Init((LPC_UART_TypeDef *)LPC_UART1, &UARTConfigStruct);		 
 		UART_FIFOConfig((LPC_UART_TypeDef *)LPC_UART1, &UARTFIFOConfigStruct);	
 		UART_TxCmd((LPC_UART_TypeDef *)LPC_UART1, ENABLE);		
@@ -54,14 +58,15 @@ void Serial::printf(char * buf, ...)
 	char temp[500];
 	vsprintf(temp, buf, arg);
 
-	write(temp);
+	int len = strlen(temp)+1;
+
+	write(temp, len);
 
 	va_end(arg);	
 }
 
-int Serial::write(char * buf)
+int Serial::write(char * buf, int length)
 {
-	int length = strlen(buf);
 	if (module == 1) {
 		return(UART_Send((LPC_UART_TypeDef *)LPC_UART0,(uint8_t *)buf,length, BLOCKING));
 	}
@@ -70,15 +75,13 @@ int Serial::write(char * buf)
 	}
 }
 
-
-int Serial::read(char * buf)
+void Serial::sendbreak()
 {
-
-	int length = strlen(buf);
 	if (module == 1) {
-		return(UART_Receive((LPC_UART_TypeDef *)LPC_UART0,(uint8_t *)buf,length, BLOCKING));
+		UART_ForceBreak((LPC_UART_TypeDef *)LPC_UART0);
 	}
-	else if (module == 2) {
-		return(UART_Receive((LPC_UART_TypeDef *)LPC_UART1,(uint8_t *)buf,length, NONE_BLOCKING));
+	if (module == 2) {
+		UART_ForceBreak((LPC_UART_TypeDef *)LPC_UART1);
 	}
 }
+
