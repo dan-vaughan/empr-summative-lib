@@ -41,15 +41,15 @@ void Serial::printf(char * buf, ...)
 	char temp[500];
 	vsprintf(temp, buf, arg);
 
-	int len = strlen(temp)+1;
-
-	write(temp, len);
+	write(temp);
 
 	va_end(arg);	
 }
 
-int Serial::write(char * buf, int length)
+int Serial::write(char * buf)
 {
+	int length = strlen(buf);
+
 	return(UART_Send((LPC_UART_TypeDef *)LPC_UART0,(uint8_t *)buf,length,BLOCKING));
 }
 
