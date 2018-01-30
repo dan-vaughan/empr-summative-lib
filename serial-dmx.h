@@ -1,14 +1,13 @@
 #include "lpc17xx_pinsel.h"
 
-class Serial
+class DMX
 {
 	protected:
 		void init();
-		int module;
 	public:
-		Serial();
+		DMX();
 		int write(char * buf, int length);
-		void printf(char * buf, ...);
-		void sendbreak();
+		void send_break();
+		void end_break();
 };
 

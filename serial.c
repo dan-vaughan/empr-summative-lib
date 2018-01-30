@@ -10,17 +10,10 @@
 
 
 // CONSTRUCTOR
-Serial::Serial(int mod)
+Serial::Serial()
 {	
-	module = mod;
-	if (module == 1) {
-		pinconf(USBTX);
-		pinconf(USBRX);
-	}
-	else if (module == 2) {
-		pinconf(SERIALTX);
-		pinconf(SERIALRX);
-	}
+	pinconf(USBTX);
+	pinconf(USBRX);
 
 	init();
 }
@@ -33,20 +26,10 @@ void Serial::init()
 	
 	UART_ConfigStructInit(&UARTConfigStruct);
 	UART_FIFOConfigStructInit(&UARTFIFOConfigStruct);	
-
-	if (module == 1) {
 		
-		UART_Init((LPC_UART_TypeDef *)LPC_UART0, &UARTConfigStruct);		 
-		UART_FIFOConfig((LPC_UART_TypeDef *)LPC_UART0, &UARTFIFOConfigStruct);	
-		UART_TxCmd((LPC_UART_TypeDef *)LPC_UART0, ENABLE);		
-	}
-	else if (module == 2) {
-		UARTConfigStruct.Stopbits = UART_STOPBIT_2;
-		UARTConfigStruct.Baud_rate = 250000;
-		UART_Init((LPC_UART_TypeDef *)LPC_UART1, &UARTConfigStruct);		 
-		UART_FIFOConfig((LPC_UART_TypeDef *)LPC_UART1, &UARTFIFOConfigStruct);	
-		UART_TxCmd((LPC_UART_TypeDef *)LPC_UART1, ENABLE);		
-	}
+	UART_Init((LPC_UART_TypeDef *)LPC_UART0, &UARTConfigStruct);		 
+	UART_FIFOConfig((LPC_UART_TypeDef *)LPC_UART0, &UARTFIFOConfigStruct);	
+	UART_TxCmd((LPC_UART_TypeDef *)LPC_UART0, ENABLE);		
 }
 
 // PUBLIC
@@ -67,21 +50,7 @@ void Serial::printf(char * buf, ...)
 
 int Serial::write(char * buf, int length)
 {
-	if (module == 1) {
-		return(UART_Send((LPC_UART_TypeDef *)LPC_UART0,(uint8_t *)buf,length, BLOCKING));
-	}
-	else if (module == 2) {
-		return(UART_Send((LPC_UART_TypeDef *)LPC_UART1,(uint8_t *)buf,length, BLOCKING));
-	}
+	return(UART_Send((LPC_UART_TypeDef *)LPC_UART0,(uint8_t *)buf,length,BLOCKING));
 }
 
-void Serial::sendbreak()
-{
-	if (module == 1) {
-		UART_ForceBreak((LPC_UART_TypeDef *)LPC_UART0);
-	}
-	if (module == 2) {
-		UART_ForceBreak((LPC_UART_TypeDef *)LPC_UART1);
-	}
-}
 
