@@ -53,14 +53,3 @@ int Serial::write(char * buf)
 	return(UART_Send((LPC_UART_TypeDef *)LPC_UART0,(uint8_t *)buf,length,BLOCKING));
 }
 
-int Serial::read(char * buf)
-{
-     int length = strlen(buf);
-     if (module == 1) {
-         return(UART_Receive((LPC_UART_TypeDef *)LPC_UART0,(uint8_t *)buf,length, BLOCKING));
-     }
-     else if (module == 2) {
-         return(UART_Receive((LPC_UART_TypeDef *)LPC_UART1,(uint8_t *)buf,length, BLOCKING));
-    }
-}
-
