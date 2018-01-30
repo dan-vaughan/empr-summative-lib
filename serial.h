@@ -10,5 +10,6 @@ class Serial
 		int write(char * buf);
 		void printf(char * buf, ...);
 		void sendbreak();
+		int read(char * buf);
 };
 
