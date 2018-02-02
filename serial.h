@@ -9,6 +9,5 @@ class Serial
 		Serial();
 		int write(char * buf);
 		void printf(char * buf, ...);
-		void sendbreak();
 };
 

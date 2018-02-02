@@ -1,5 +1,8 @@
 #include "lpc17xx_pinsel.h"
 
+#define DISPLAY 0x3B
+#define KEYPAD 0x21
+
 class I2C
 {
 	protected:

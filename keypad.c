@@ -1,7 +1,8 @@
 #include "lpc_types.h"
 
-#include "main.h"
+#include "i2c.h"
 #include "pindef.h"
+#include "utilities.h"
 
 char pressed[16] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
 char masks[4] = {0x08, 0x04, 0x02, 0x01}; 

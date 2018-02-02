@@ -6,6 +6,7 @@
 
 #include "serial-dmx.h"	
 #include "pindef.h"
+#include "utilities.h"
 
 
 // CONSTRUCTOR
@@ -34,7 +35,18 @@ void DMX::init()
 	UART_TxCmd((LPC_UART_TypeDef *)LPC_UART1, ENABLE);		
 }
 
+
 // PUBLIC
+void DMX::send(char * buf, int length)
+{
+	write(buf, length);
+	delay(1000);
+	send_break();
+	delay(1000);
+	end_break(); 
+	delay(40);	//Precise timing to bodge the end break's high into a MAB
+}
+
 int DMX::write(char * buf, int length)
 {
 	return(UART_Send((LPC_UART_TypeDef *)LPC_UART1,(uint8_t *)buf,length, BLOCKING));
@@ -42,10 +54,13 @@ int DMX::write(char * buf, int length)
 
 void DMX::send_break()
 {
-	LPC_UART1->LCR |= UART_LCR_BREAK_EN;
+	LPC_UART1->LCR |= UART_LCR_BREAK_EN;	//Set bit 6 to 1
 }
 
 void DMX::end_break()
 {
-	LPC_UART1->LCR &= !UART_LCR_BREAK_EN;
+	LPC_UART1->LCR &= ~UART_LCR_BREAK_EN;	//Set bit 6 to 0
 }
+
+
+
