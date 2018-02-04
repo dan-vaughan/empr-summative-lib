@@ -83,3 +83,12 @@ void printstr(char * str)
         i++;        
     }   
 }
+
+void clear_display()
+{
+	printstr("                ");
+	shift_line();
+	printstr("                ");
+	return_home();
+}
+
