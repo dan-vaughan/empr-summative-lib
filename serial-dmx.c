@@ -54,7 +54,7 @@ int DMX::write(char * buf, int length)
 
 int DMX::read(char * buf)
 {
-int length = strlen(buf);
+	int length = strlen(buf);
 	return(UART_Receive((LPC_UART_TypeDef *)LPC_UART1,(uint8_t *)buf,length, NONE_BLOCKING));
 }
 
