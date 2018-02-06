@@ -9,6 +9,8 @@ enum Shift_Type
 	RIGHT
 };
 
+//0x22 is one up arrow, and one down arrow
+
 void reset()
 {
     uint8_t cmd[3] =
@@ -73,6 +75,13 @@ void printchar(char ascii)
 	i2c.write(DISPLAY, cmd, 2);
 }
 
+void putcustom(char custom){
+	uint8_t cmd[2] =
+	 {0b01000000,  // Control byte for Data
+	custom};
+i2c.write(DISPLAY, cmd, 2);
+}
+
 void printstr(char * str)
 {
     int i = 0;
@@ -84,14 +93,15 @@ void printstr(char * str)
     }
 }
 
-void cleardisplay()
+void clear_display()
 {
+	return_home();
 	int i;
 	for (i = 0; i < 20; i++)
 	{
 			printchar(' ');
 	}
-
+	cursor_shift(RIGHT, 20);
 	for (i = 0; i < 20; i++)
 	{
 			printchar(' ');
