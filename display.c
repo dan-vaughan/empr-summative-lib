@@ -1,21 +1,27 @@
-#include "main.h"
-#include "display.h"
+#include "i2c.h"
+#include "utilities.h"
+
+#include "lpc_types.h"
+
+enum Shift_Type
+{
+	LEFT,
+	RIGHT
+};
 
 void reset()
 {
-	#define LEN 3
-    uint8_t cmd[LEN] = 
+    uint8_t cmd[3] =
 	   {0b00000000,  // Control byte for Instruction
     	0b00110100,  // Choose Standard instruction set
     	0b00000001}; // Clear the display
 
-	i2c.write(DISPLAY, cmd, LEN);
+	i2c.write(DISPLAY, cmd, 3);
 }
 
 void setup_display()
 {
-	#define LEN 10
-    uint8_t cmd[LEN] = 
+    uint8_t cmd[10] =
 	   {0b00000000,  // Control byte for Instruction
     	0b00110100,  // Choose Standard instruction set
    		0b00001100,  // D: Display on, C: curser off, B: blink off
@@ -27,59 +33,67 @@ void setup_display()
     	0b10000000,  // Set DDRAM address to 0
     	0b00000010}; // return home
 
-	i2c.write(DISPLAY, cmd, LEN);
+	i2c.write(DISPLAY, cmd, 10);
 }
 
 void return_home()
 {
-	#define LEN 2 
-	uint8_t cmd[LEN] = {0x00, 0x02};
-	i2c.write(DISPLAY, cmd, LEN);
+	uint8_t cmd[2] = {0x00, 0x02};
+	i2c.write(DISPLAY, cmd, 2);
 }
 
 void shift_line()
 {
-	#define LEN 2 
-	uint8_t cmd[LEN] = {0x00, 0xc0};
-	i2c.write(DISPLAY, cmd, LEN);
+	uint8_t cmd[2] = {0x00, 0xc0};
+	i2c.write(DISPLAY, cmd, 2);
 }
 
 void cursor_shift(Shift_Type t, int amount){
-	#define LEN 2
 	int i;
-
-	if(t==LEFT){		
-			uint8_t cmd[LEN] = {0x00, 0x10};
+	if(t==LEFT){
+			uint8_t cmd[2] = {0x00, 0x10};
 			for (i = 0; i < amount; i++){
-				i2c.write(DISPLAY, cmd, LEN);
+				i2c.write(DISPLAY, cmd, 2);
 			}
 		}
 
 	if(t==RIGHT){
-			uint8_t cmd[LEN] = {0x00, 0x14};
+			uint8_t cmd[2] = {0x00, 0x14};
 			for (i = 0; i < amount; i++){
-				i2c.write(DISPLAY, cmd, LEN);
+				i2c.write(DISPLAY, cmd, 2);
 			}
 	}
 }
 
 void printchar(char ascii)
 {
-	#define LEN 2
-    uint8_t cmd[LEN] =
+    uint8_t cmd[2] =
 	   {0b01000000,  // Control byte for Data
 		0x80 + ascii};
-
-	i2c.write(DISPLAY, cmd, LEN);
+	i2c.write(DISPLAY, cmd, 2);
 }
 
 void printstr(char * str)
 {
     int i = 0;
-    
+
     while (str[i] != 0)
     {
         printchar(str[i]);
-        i++;        
-    }   
+        i++;
+    }
+}
+
+void cleardisplay()
+{
+	int i;
+	for (i = 0; i < 20; i++)
+	{
+			printchar(' ');
+	}
+
+	for (i = 0; i < 20; i++)
+	{
+			printchar(' ');
+	}
 }
