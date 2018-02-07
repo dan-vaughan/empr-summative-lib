@@ -31,6 +31,7 @@ void DMX::init()
 	cfg.Stopbits = UART_STOPBIT_2;
 
 	UART_Init((LPC_UART_TypeDef *)LPC_UART1, &cfg);		 
+	LPC_UART1->IER |= (1 << 2); //Enable interrupt register
 	UART_FIFOConfig((LPC_UART_TypeDef *)LPC_UART1, &UARTFIFOConfigStruct);	
 	UART_TxCmd((LPC_UART_TypeDef *)LPC_UART1, ENABLE);		
 }
@@ -52,10 +53,10 @@ int DMX::write(char * buf, int length)
 	return(UART_Send((LPC_UART_TypeDef *)LPC_UART1,(uint8_t *)buf,length, BLOCKING));
 }
 
-int DMX::read(char * buf)
-{
-	int length = strlen(buf);
-	return(UART_Receive((LPC_UART_TypeDef *)LPC_UART1,(uint8_t *)buf,length, NONE_BLOCKING));
+int DMX::read(uint8_t* buf)
+{	//Should change this to uint8_t
+	int length = sizeof(buf)/sizeof(uint8_t);
+	return(UART_Receive((LPC_UART_TypeDef *)LPC_UART1,buf,length, NONE_BLOCKING));
 }
 
 void DMX::send_break()
