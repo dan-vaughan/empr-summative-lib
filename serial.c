@@ -46,7 +46,7 @@ void Serial::printf(char * buf, ...)
 	va_end(arg);	
 }
 
-int Serial::write(char * buf)
+int Serial::write(const char * buf)
 {
 	int length = strlen(buf);
 

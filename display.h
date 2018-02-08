@@ -7,7 +7,7 @@ enum Shift_Type
 void printchar(char);
 void setup_display();
 void reset();
-void printstr(char *);
+void printstr(const char *);
 void return_home();
 void shift_line();
 void cursor_shift(Shift_Type t, int amount);

@@ -1,4 +1,3 @@
-#include "i2c.h"
 #include "utilities.h"
 
 #include "lpc_types.h"
@@ -82,7 +81,7 @@ void putcustom(char custom){
 i2c.write(DISPLAY, cmd, 2);
 }
 
-void printstr(char * str)
+void printstr(const char * str)
 {
     int i = 0;
 

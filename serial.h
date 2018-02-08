@@ -7,7 +7,7 @@ class Serial
 		int module;
 	public:
 		Serial();
-		int write(char * buf);
+		int write(const char * buf);
 		void printf(char * buf, ...);
 };
 
