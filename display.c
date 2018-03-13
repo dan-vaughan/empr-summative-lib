@@ -73,6 +73,13 @@ void printchar(char ascii)
 	i2c.write(DISPLAY, cmd, LEN);
 }
 
+void putcustom(char custom){
+	uint8_t cmd[2] =
+	 {0b01000000,  // Control byte for Data
+	custom};
+	i2c.write(DISPLAY, cmd, 2);
+}
+
 void printstr(char * str)
 {
     int i = 0;

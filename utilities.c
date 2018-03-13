@@ -2,7 +2,7 @@
 #include "pindef.h"
 
 //PUBLIC
-I2C i2c(SDA, SCL);
+//I2C i2c(SDA, SCL);
 
 void delay(int time)
 {
